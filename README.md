@@ -1,24 +1,28 @@
 Feature: Post group work
 	Scenarios created by Gallery Team (Ivans Cvetkovs, Una Drilina, Andrejs Safonovs and Arturs Maksimovics)
+#================================By Ivans Cvetkovs=================================================#
+
 
 @ViewAllGalleries
 Scenario: View all Galleries
 	Given We are on home page 
-	And User have clicked on Photo Gallery in the menu
+	When User have clicked on Photo Gallery in the menu
 	Then All galleries are shown
 
 @ViewAllGalleries
 Scenario Outline: Change order of galleries in all galleries
 	Given we are on Gallery list page
-	When user click on <field>
-	Then gallery list is sorted by <field>
+	When user click on <field> <sorttype>
+	Then gallery list is sorted by <field> <sorttype> 
+	
 Examples:
-| field  	|
-| ID	 	|
-| Name	 	|
+| field  	| sorttype   |
+| ID	 	| ascending  |
+| Name	 	| descending |
 | Slug	 	|
 | Author 	|
 | Published |	
+
 		
 @ViewALlGalleries
 Scenario: Publish gallery via symbol or bulk action
@@ -31,7 +35,7 @@ Scenario: Delete gallery via symbol or bulk action
 	Given we are on Gallery list page
 	When User press delete button
 	Then All selected gallery should be deleted
-	And It could not be restored
+		And It could not be restored
 	
 @ViewAllGalleries
 Scenario: Unpublish gallery via symbol or bulk action
@@ -152,14 +156,14 @@ Examples:
 @AddNewGallery
 Scenario Outline:  Try to press save or apply if Name field is empty
 	Given Open Create new gallery form
-	And User leave Name field empty
+		And User leave Name field empty
 	When User click on <button> 
-	Then see <results>
+	Then appears error message, with message that this field is mandatory
 
 Examples:
-|button|results|
-|apply|appears error message, with message that this field is mandatory|
-|save |appears error message, with message that this field is mandatory|
+|button|
+|apply |
+|save  |
 
 @AddNewGallery
 Scenario: check preview image field (miss info)
@@ -171,12 +175,12 @@ Scenario: check preview image field (miss info)
 Scenario Outline: Edit gallery
 	Given We are on all galleries page
 	When user click on <button> 
-	Then user see <results >
+	Then user see Create new gallery form
 
 Examples:
-|button|results|
-|edit symbol|Create new gallery form|
-|name field |Create new gallery form|
+|button		|
+|edit symbol|
+|name field |
 
 @EditGallery
 Scenario Outline: Save edited fields (need more attention)
@@ -188,11 +192,11 @@ Scenario Outline: Save edited fields (need more attention)
 
 
 Examples:
-|name|button|results|
-|gallery      |apply|changes will be saved and view will be reload                   |
-|gallery      |save |changes will be saved and all gallery view will be opened       |
-|[empty space]|apply|appears error message, with message that this field is mandatory|
-|[empty space]|save |appears error message, with message that this field is mandatory|
+|name		  |button	|results														 |
+|gallery      |apply	|changes will be saved and view will be reload                   |
+|gallery      |save 	|changes will be saved and all gallery view will be opened       |
+|[empty space]|apply	|appears error message, with message that this field is mandatory|
+|[empty space]|save 	|appears error message, with message that this field is mandatory|
 
 @AddNewAlbum
 Scenario: Create new album
@@ -205,15 +209,16 @@ Scenario: Add an existing gallery/album to the album
 	Given user open web page
 	When user click on Add Album/Gallery in menu
 	Then user see all existing albums list
-	And user have options to delete/change the order of album/gallery
+		And user have options to delete/change the order of album/gallery
 
 @AddNewAlbum
-Scenario: Fields of Add new Album
+Scenario Outline: Fields of Add new Album
 	Given we are on  Album view page
 	When user click on Add new
 	Then user see Create new Album form
-		And album has fields:<titlt> and <type> 
-	|title|type|
+		And album has fields:<title> and <type> 
+	Examples:
+	|title		   |type      |
 	|Name:*        |textbox   |
 	|Slug:         |textbox   |
 	|Description:  |textbox   |
@@ -226,16 +231,16 @@ Scenario: Fields of Add new Album
 
 @AddGalleryToPage(Thumbnails) @AddGalleryToPage(Slideshow) @AddGalleryToPage(ImageBrowser)
 Scenario: Adding gallery to page Thumbnails/Slideshow/Image Browser 
-Given  We are on home page 
-When  User clicks on the gallery icon (camera) in the page content menu 
-Then  Photo gallery form is displayed 
+	Given  We are on home page 
+	When  User clicks on the gallery icon (camera) in the page content menu 
+	Then  Photo gallery form is displayed 
 
 @AddGalleryToPage(Thumbnails) @AddGalleryToPage(Slideshow) @AddGalleryToPage(ImageBrowser)
 Scenario Outline: Section selection 
-Given View customization form (Photo gallery) 
-When User selects <section>
-Then corresponding gallery is displayed in the <result> gallery field 
-Examples: 
+	Given View customization form (Photo gallery) 
+	When User selects <section>
+	Then corresponding gallery is displayed in the <result> gallery field 
+	Examples: 
 |	section			|	result			|
 |	Thumbnails		|	Thumnails		|
 |	Slideshow		|	Slideshow		|
@@ -243,10 +248,10 @@ Examples:
 
 @AddGalleryToPage(Thumbnails) @AddGalleryToPage(Slideshow) @AddGalleryToPage(ImageBrowser)
 Scenario Outline: Gallery choosing 
-Given View customization form (Photo gallery) <section>
-When User selects <name> gallery in the gallery list
-Then corresponding gallery is displayed in the <result> gallery list
-Examples: 
+	Given View customization form (Photo gallery) <section>
+	When User selects <name> gallery in the gallery list
+	Then corresponding gallery is displayed in the <result> gallery list
+	Examples: 
 |	section			|	result			|
 |	Gallery1		|	Gallery1		|
 |	Gallery2		|	Gallery2		|
@@ -254,30 +259,30 @@ Examples:
 
 @AddGalleryToPage(Thumbnails)
 Scenario Outline: Image columns per page 
-Given View customization form (Photo gallery) <section> 
-When User inserts maximal number <input> of image columns 
-Then Users insert input <result> is displayed in the field-box 
-Examples: 
+	Given View customization form (Photo gallery) <section> 
+	When User inserts maximal number <input> of image columns 
+	Then Users insert input <result> is displayed in the field-box 
+	Examples: 
 |	section			|	input	|	result	|
 |	Thumbnail		|	5		|	5		|
 
 
 @AddGalleryToPage(Thumbnails) @AddGalleryToPage(ImageBrowser)
 Scenario Outline: Images count per page 
-Given View customization form (Photo gallery) <section> 
-When User inserts number <input> of images per page 
-Then Users insert input <result> is displayed in the field-box 
-Examples: 
+	Given View customization form (Photo gallery) <section> 
+	When User inserts number <input> of images per page 
+	Then Users insert input <result> is displayed in the field-box 
+	Examples: 
 |	section			|	input	|	result	|
 |	Thumbnail		|	5		|	5		|
 |	Image Browser	|	5		|	5		|				
 				
 @AddGalleryToPage(Thumbnails) @AddGalleryToPage(Slideshow) @AddGalleryToPage(ImageBrowser)
 Scenario Outline: Ordering by option 
-Given View customization form (Photo gallery) <section> 
-When User selects ordering <option> 
-Then Corresponding <result> is selected 
-Examples: 
+	Given View customization form (Photo gallery) <section> 
+	When User selects ordering <option> 
+	Then Corresponding <result> is selected 
+	Examples: 
 |	section			|	option		|	result		|
 |	Thumbnail		|	Title		|	Title		|
 |	Thumbnail		|	Date		|	Date		|
@@ -303,10 +308,10 @@ Examples:
 					
 @AddGalleryToPage(Thumbnails) @AddGalleryToPage(Slideshow) @AddGalleryToPage(ImageBrowser)
 Scenario Outline: Sorting by option 
-Given View customization form (Photo gallery) <section> 
-When User selects sort <type> 
-Then Corresponding <result> is selected 
-Examples: 
+	Given View customization form (Photo gallery) <section> 
+	When User selects sort <type> 
+	Then Corresponding <result> is selected 
+	Examples: 
 |	section			|	type		|	result		|
 |	Thumbnail		|	Ascending	|	Ascending	|
 |	Thumbnail		|	Descending	|	Descending	|
@@ -317,10 +322,10 @@ Examples:
 						
 @AddGalleryToPage(Thumbnails) @AddGalleryToPage(Slideshow) @AddGalleryToPage(ImageBrowser)
 Scenario Outline: Image title properties 
-Given View customization form (Photo gallery) <section> 
-When User selects image title <option> 
-Then Image title corresponding <result> is selected 
-Examples: 
+	Given View customization form (Photo gallery) <section> 
+	When User selects image title <option> 
+	Then Image title corresponding <result> is selected 
+	Examples: 
 |	section			|	option			|	result			|
 |	Thumbnails		|	Show on hover	|	Show on hover	|
 |	Thumbnails		|	Always show		|	Always show		|
@@ -332,10 +337,10 @@ Examples:
 							
 @AddGalleryToPage(Thumbnails)
 Scenario Outline: Enabling pagination 
-Given View customization form (Photo gallery) <section> 
-When User selects pagination <option> 
-Then Pagination corresponding <result> is selected 
-Examples: 
+	Given View customization form (Photo gallery) <section> 
+	When User selects pagination <option> 
+	Then Pagination corresponding <result> is selected 
+	Examples: 
 |	section		|	option			|	result			|
 |	Thumbnails	|	Yes				|	Yes				|
 |	Thumbnails	|	No				|	No				|
@@ -344,10 +349,10 @@ Examples:
 							
 @AddGalleryToPage(Thumbnails) @AddGalleryToPage(ImageBrowser)
 Scenario Outline: Thumb click action 
-Given View customization form (Photo gallery) <section> 
-When User selects thumb click action <option> 
-Then Thumb click action corresponding <result> is selected 
-Examples: 
+	Given View customization form (Photo gallery) <section> 
+	When User selects thumb click action <option> 
+	Then Thumb click action corresponding <result> is selected 
+	Examples: 
 |	section			|	option			|	result			|
 |	Thumbnails		|	Open lightbox	|	Open lightbox	|
 |	Thumbnails		|	Redirect to url	|	Redirect to url	|
@@ -358,10 +363,10 @@ Examples:
 						
 @AddGalleryToPage(Slideshow) @AddGalleryToPage(ImageBrowser)
 Scenario Outline: Effect duration 
-Given View customization form (Photo gallery) <section> 
-When User inserts effect duration <input> in the input-field-box 
-Then Users insert <result> is displayed 
-Examples: 
+	Given View customization form (Photo gallery) <section> 
+	When User inserts effect duration <input> in the input-field-box 
+	Then Users insert <result> is displayed 
+	Examples: 
 |	section			|	input	|	result	|
 |	Image browser	|	10		|	10		|
 |	Slideshow		|	10		|	10		|
